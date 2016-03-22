@@ -13,7 +13,7 @@ $(function () {
         $form.showFormError('');
         var content = $form.find('textarea').val().trim();
         if (content==='') {
-            return $form.showFormError('请输入评论内容！');
+            return $form.showFormError('Please input comment context！');
         }
         $form.postJSON(comment_url, { content: content }, function (err, result) {
             if (err) {
@@ -32,14 +32,14 @@ $(function () {
     <div class="uk-width-medium-3-4">
         <article class="uk-article">
             <h2>{{ blog.name }}</h2>
-            <p class="uk-article-meta">发表于{{ blog.created_at|datetime }}</p>
+            <p class="uk-article-meta">Published{{ blog.created_at|datetime }}</p>
             <p>{{ blog.html_content|safe }}</p>
         </article>
 
         <hr class="uk-article-divider">
 
     {% if __user__ %}
-        <h3>发表评论</h3>
+        <h3>Comment</h3>
 
         <article class="uk-comment">
             <header class="uk-comment-header">
@@ -50,10 +50,10 @@ $(function () {
                 <form id="form-comment" class="uk-form">
                     <div class="uk-alert uk-alert-danger uk-hidden"></div>
                     <div class="uk-form-row">
-                        <textarea rows="6" placeholder="说点什么吧" style="width:100%;resize:none;"></textarea>
+                        <textarea rows="6" placeholder="say something" style="width:100%;resize:none;"></textarea>
                     </div>
                     <div class="uk-form-row">
-                        <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-comment"></i> 发表评论</button>
+                        <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-comment"></i> Comment</button>
                     </div>
                 </form>
             </div>
@@ -62,7 +62,7 @@ $(function () {
         <hr class="uk-article-divider">
     {% endif %}
 
-        <h3>最新评论</h3>
+        <h3>Latest Comments</h3>
 
         <ul class="uk-comment-list">
             {% for comment in comments %}
@@ -70,7 +70,7 @@ $(function () {
                 <article class="uk-comment">
                     <header class="uk-comment-header">
                         <img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="{{ comment.user_image }}">
-                        <h4 class="uk-comment-title">{{ comment.user_name }} {% if comment.user_id==blog.user_id %}(作者){% endif %}</h4>
+                        <h4 class="uk-comment-title">{{ comment.user_name }} {% if comment.user_id==blog.user_id %}(Author){% endif %}</h4>
                         <p class="uk-comment-meta">{{ comment.created_at|datetime }}</p>
                     </header>
                     <div class="uk-comment-body">
@@ -79,7 +79,7 @@ $(function () {
                 </article>
             </li>
             {% else %}
-            <p>还没有人评论...</p>
+            <p>No one comment...</p>
             {% endfor %}
         </ul>
 
@@ -93,11 +93,11 @@ $(function () {
             </div>
         </div>
         <div class="uk-panel uk-panel-header">
-            <h3 class="uk-panel-title">友情链接</h3>
+            <h3 class="uk-panel-title">Friendship link</h3>
             <ul class="uk-list uk-list-line">
-                <li><i class="uk-icon-link"></i> <a href="#">编程</a></li>
-                <li><i class="uk-icon-link"></i> <a href="#">思考</a></li>
-                <li><i class="uk-icon-link"></i> <a href="#">读书</a></li>
+                <li><i class="uk-icon-link"></i> <a href="#">Coding</a></li>
+                <li><i class="uk-icon-link"></i> <a href="#">Thinking</a></li>
+                <li><i class="uk-icon-link"></i> <a href="#">Reading</a></li>
             </ul>
         </div>
     </div>

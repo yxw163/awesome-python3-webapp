@@ -107,6 +107,7 @@ class RequestHandler(object):
 						return web.HTTPBadRequest('JSON Body must be object')
 
 					kw = params
+
 				elif ct.startswith('application/x-www-form-urlencoded') or ct.startswith('multipart/form-data'):
 						params = yield from request.post()
 						kw = dict(**params)
@@ -122,9 +123,9 @@ class RequestHandler(object):
 					print(parse.parse_qs(qs, True))
 					for k, v in parse.parse_qs(qs, True).items():
 						kw[k] = v[0]
+		
 		if kw is None:
 			kw = dict(**request.match_info)
-			logging.info('kw = %s' %kw)
 		else:
 			if not self._has_var_kw_arg and self._named_kw_args:
 				copy = dict()
@@ -135,10 +136,11 @@ class RequestHandler(object):
 				kw = copy
 
 			for k,v in request.match_info.items():
-				if k in kw.match_info:
+				if k in kw:
 					logging.warning('Duplicate arg name in named arg and kw args: %s' % k)
-					kw[k] = v
+				kw[k] = v
 
+		
 		if self._has_request_arg:
 			kw['request'] = request
 
@@ -149,6 +151,7 @@ class RequestHandler(object):
 			logging.info('call with args: %s' % str(kw))
 		try:
 			#对url进行处理
+			
 			r = yield from self._func(**kw)
 			return r
 		except APIError as e:

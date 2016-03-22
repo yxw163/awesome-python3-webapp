@@ -1,10 +1,13 @@
 drop database if exists awesome;
-create database awesome;
-use awesome;
-grant select,insert,update,delete on awesome.* to 'yxw'@'localhost' identified by 'yxw';
 
-create table users(
-	`id` varchar(50) not null,
+create database awesome;
+
+use awesome;
+
+grant select, insert, update, delete on awesome.* to 'www-data'@'localhost' identified by 'www-data';
+
+create table users (
+    `id` varchar(50) not null,
     `email` varchar(50) not null,
     `passwd` varchar(50) not null,
     `admin` bool not null,
@@ -13,8 +16,8 @@ create table users(
     `created_at` real not null,
     unique key `idx_email` (`email`),
     key `idx_created_at` (`created_at`),
-    primary key (`id`) 
-) engine = innodb default charset = utf8;
+    primary key (`id`)
+) engine=innodb default charset=utf8;
 
 create table blogs (
     `id` varchar(50) not null,

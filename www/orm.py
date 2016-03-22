@@ -110,6 +110,10 @@ class ModelMetaclass(type):
             primaryKey, ','.join(escaped_fields), tableName)
         attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (tableName, ', '.join(
             escaped_fields), primaryKey, create_args_string(len(escaped_fields) + 1))
+        attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (tableName, ', '.join(
+            map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
+        attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (
+            tableName, primaryKey)
 
         return type.__new__(cls, name, base, attrs)
 
@@ -191,6 +195,8 @@ class Model(dict, metaclass=ModelMetaclass):
                 raise ValueError('Invalid limit value: %s' % str(limit))
         logging.info('sql = %s' % sql)
         rs = yield from select(' '.join(sql), args)
+
+        logging.info(rs)
 
         return [cls(**r) for r in rs]
 
