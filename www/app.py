@@ -45,13 +45,13 @@ def init_jinja2(app, **kw):
 def datetime_filter(t):
     delta = int(time.time() - t)
     if delta < 60:
-        return u'1分钟前'
+        return u'a minute ago'
     if delta < 3600:
-        return u'%s分钟前' % (delta // 60)
+        return u'%s minute ago' % (delta // 60)
     if delta < 86400:
-        return u'%s小时前' % (delta // 3600)
+        return u'%s hours ago' % (delta // 3600)
     if delta < 604800:
-        return u'%s天前' % (delta // 86400)
+        return u'%s days ago' % (delta // 86400)
     dt = datetime.fromtimestamp(t)
     return u'%s年%s月%s日' % (dt.year, dt.month, dt.day)
 
@@ -101,6 +101,7 @@ def response_factory(app, handler):
                 resp = web.Response(body=app['__templating__'].get_template(template).render(**r).encode('utf-8'))
                 resp.content_type = 'text/html;charset=utf-8'
                 return resp
+
         if isinstance(r, int) and r >= 100 and r < 600:
             return web.Response(t)
 
@@ -123,13 +124,13 @@ def auth_factory(app,handler):
         request.__user__ = None
         cookie_str = request.cookies.get(__COOKIE_NAME)
 
-        print("**********cookie_str = %s" %cookie_str)
         if cookie_str:
             user = yield from cookie2user(cookie_str)
             if user:
                 request.__user__ = user
         if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
             return web.HTTPFound('/signin')
+        
         return (yield from handler(request))
     return auth
 
@@ -144,7 +145,7 @@ def init(loop):
     init_jinja2(app, filters=dict(datetime=datetime_filter))
     add_routes(app, 'handler')
     add_static(app)
-    srv = yield from loop.create_server(app.make_handler(), '127.0.0.1', '8000')
+    srv = yield from loop.create_server(app.make_handler(), '127.0.0.1', '8080')
     logging.info('server started at http://127.0.0.1:9000')
     return srv
 
