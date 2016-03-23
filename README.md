@@ -12,6 +12,6 @@
     back-end: 
         use asyncio/aiohttp/WSGI/mysql in python;
         relize a simple ORM use coroutine in python3.5;
-        relize a simple python web frame by encapsulate aiohttp;
+        relize a simple web framework by encapsulate aiohttp;
         use mysql 
         
